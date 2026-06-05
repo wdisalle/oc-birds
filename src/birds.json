@@ -28,6 +28,9 @@
         "label": "Adult",
         "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/202728916/medium.jpg",
         "credit": "iNaturalist"
+        "label": "Adult",
+        "url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/ML_635230144/1200",
+        "credit": "Cornell"
       }
     ]
   },
