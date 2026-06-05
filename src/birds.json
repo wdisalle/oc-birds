@@ -1,0 +1,358 @@
+{
+  "_readme": {
+    "about": "Bird image repository for OC Hikes & Birds app.",
+    "how_to_add_photos": [
+      "1. Go to https://search.macaulaylibrary.org/catalog?taxonCode=BIRD_CODE&mediaType=Photo",
+      "2. Search by common name, filter to Photo, sort by Rating",
+      "3. Click a photo you like, copy the asset number from the URL (e.g. ML123456789)",
+      "4. Build the URL: https://cdn.download.ams.birds.cornell.edu/api/v2/asset/ML_NUMBER/1200",
+      "5. Add it to the photos array below with an appropriate label",
+      "",
+      "Label conventions: Adult Male, Adult Female, Juvenile, Immature, Breeding Adult, Non-breeding Adult, In Flight",
+      "",
+      "iNaturalist photos: https://www.inaturalist.org/taxa/search?q=BIRD+NAME",
+      "  Click the taxon, then 'View photos' — right-click any photo, copy image address",
+      "  Or use S3 format: https://inaturalist-open-data.s3.amazonaws.com/photos/PHOTO_ID/medium.jpg",
+      "",
+      "Your own photos: add to /public/bird-photos/FILENAME.jpg and reference as /bird-photos/FILENAME.jpg"
+    ],
+    "macaulay_library_url_format": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/{ML_NUMBER}/1200",
+    "inaturalist_url_format": "https://inaturalist-open-data.s3.amazonaws.com/photos/{PHOTO_ID}/medium.jpg"
+  },
+
+  "great-blue-heron": {
+    "commonName": "Great Blue Heron",
+    "sciName": "Ardea herodias",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/202728916/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "black-necked-stilt": {
+    "commonName": "Black-necked Stilt",
+    "sciName": "Himantopus mexicanus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862802/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "american-avocet": {
+    "commonName": "American Avocet",
+    "sciName": "Recurvirostra americana",
+    "photos": [
+      {
+        "label": "Breeding Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/4083403/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "snowy-egret": {
+    "commonName": "Snowy Egret",
+    "sciName": "Egretta thula",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862684/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "osprey": {
+    "commonName": "Osprey",
+    "sciName": "Pandion haliaetus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/12519712/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "least-bells-vireo": {
+    "commonName": "Least Bell's Vireo",
+    "sciName": "Vireo bellii pusillus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/17845015/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "california-quail": {
+    "commonName": "California Quail",
+    "sciName": "Callipepla californica",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/9850526/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "greater-roadrunner": {
+    "commonName": "Greater Roadrunner",
+    "sciName": "Geococcyx californianus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/4436299/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "acorn-woodpecker": {
+    "commonName": "Acorn Woodpecker",
+    "sciName": "Melanerpes formicivorus",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862522/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "white-tailed-kite": {
+    "commonName": "White-tailed Kite",
+    "sciName": "Elanus leucurus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/12345118/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "wrentit": {
+    "commonName": "Wrentit",
+    "sciName": "Chamaea fasciata",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/18101214/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "california-towhee": {
+    "commonName": "California Towhee",
+    "sciName": "Melozone crissalis",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862750/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "annas-hummingbird": {
+    "commonName": "Anna's Hummingbird",
+    "sciName": "Calypte anna",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862568/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "california-gnatcatcher": {
+    "commonName": "California Gnatcatcher",
+    "sciName": "Polioptila californica",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/29673628/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "peregrine-falcon": {
+    "commonName": "Peregrine Falcon",
+    "sciName": "Falco peregrinus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862738/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "brown-pelican": {
+    "commonName": "Brown Pelican",
+    "sciName": "Pelecanus occidentalis",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/28897913/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "nuttalls-woodpecker": {
+    "commonName": "Nuttall's Woodpecker",
+    "sciName": "Dryobates nuttallii",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862666/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "cactus-wren": {
+    "commonName": "Cactus Wren",
+    "sciName": "Campylorhynchus brunneicapillus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862660/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "red-tailed-hawk": {
+    "commonName": "Red-tailed Hawk",
+    "sciName": "Buteo jamaicensis",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/202602991/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "western-bluebird": {
+    "commonName": "Western Bluebird",
+    "sciName": "Sialia mexicana",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862788/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "american-coot": {
+    "commonName": "American Coot",
+    "sciName": "Fulica americana",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862490/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "coopers-hawk": {
+    "commonName": "Cooper's Hawk",
+    "sciName": "Accipiter cooperii",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6863066/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "says-phoebe": {
+    "commonName": "Say's Phoebe",
+    "sciName": "Sayornis saya",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862772/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "white-crowned-sparrow": {
+    "commonName": "White-crowned Sparrow",
+    "sciName": "Zonotrichia leucophrys",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862808/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "northern-harrier": {
+    "commonName": "Northern Harrier",
+    "sciName": "Circus hudsonius",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862704/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "loggerhead-shrike": {
+    "commonName": "Loggerhead Shrike",
+    "sciName": "Lanius ludovicianus",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862638/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "costas-hummingbird": {
+    "commonName": "Costa's Hummingbird",
+    "sciName": "Calypte costae",
+    "photos": [
+      {
+        "label": "Adult Male",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862584/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  },
+
+  "rufous-crowned-sparrow": {
+    "commonName": "Rufous-crowned Sparrow",
+    "sciName": "Aimophila ruficeps",
+    "photos": [
+      {
+        "label": "Adult",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/15322251/medium.jpg",
+        "credit": "iNaturalist"
+      }
+    ]
+  }
+}
