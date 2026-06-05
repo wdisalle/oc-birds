@@ -1,19 +1,15 @@
 import { useState, useEffect } from "react";
 
 // ─── EBIRD KEY ───────────────────────────────────────────────────────────────
-// Vercel injects REACT_APP_EBIRD_KEY at build time via Environment Variables.
-// try/catch keeps the app from crashing in environments where process is undefined.
 /* global process */
 const EBIRD_KEY = (() => {
   try { return process.env.REACT_APP_EBIRD_KEY || ""; } catch { return ""; }
 })();
 
-// ─── BIRD PHOTOS ─────────────────────────────────────────────────────────────
-// All photos from iNaturalist open data S3 — AWS-hosted, CORS-free, no auth needed.
-// URL format: https://inaturalist-open-data.s3.amazonaws.com/photos/{id}/medium.jpg
-const P = (id) => `https://inaturalist-open-data.s3.amazonaws.com/photos/${id}/medium.jpg`;
-
-// ─── HIKE DATA ───────────────────────────────────────────────────────────────
+// ─── HIKE + BIRD DATA ────────────────────────────────────────────────────────
+// Photos are stored separately in /public/birds.json and loaded at runtime.
+// Each bird references its key in that file via `photoKey`.
+// To add/fix photos: edit birds.json only — no code changes needed.
 const hikes = [
   {
     id: 1,
@@ -30,12 +26,12 @@ const hikes = [
     eBirdHotspot: "L200295",
     eBirdUrl: "https://ebird.org/hotspot/L200295",
     birds: [
-      { name: "Great Blue Heron",     sciName: "Ardea herodias",           note: "Standing nearly 4 ft tall, this prehistoric-looking wader is hard to miss along the pond edges.", audubon: "https://www.audubon.org/field-guide/bird/great-blue-heron",      img: P(202728916) },
-      { name: "Black-necked Stilt",   sciName: "Himantopus mexicanus",     note: "Unmistakable pied bird on absurdly long pink legs. Noisily defends its nest — kids love the drama.", audubon: "https://www.audubon.org/field-guide/bird/black-necked-stilt",   img: P(6862802) },
-      { name: "American Avocet",      sciName: "Recurvirostra americana",  note: "Elegant shorebird with a long upturned bill it sweeps side-to-side. Vivid russet head in breeding plumage.", audubon: "https://www.audubon.org/field-guide/bird/american-avocet",     img: P(4083403) },
-      { name: "Snowy Egret",          sciName: "Egretta thula",            note: "Bright white with yellow feet it uses to stir up fish. Once hunted to near extinction for its plumes.", audubon: "https://www.audubon.org/field-guide/bird/snowy-egret",          img: P(6862684) },
-      { name: "Osprey",               sciName: "Pandion haliaetus",        note: "Fish-hunting raptor that hovers then plunge-dives feet-first into water. A crowd favorite.", audubon: "https://www.audubon.org/field-guide/bird/osprey",               img: P(12519712) },
-      { name: "Least Bell's Vireo",   sciName: "Vireo bellii pusillus",    note: "Federally endangered. Arrives each May to nest in willows. Hearing it is easier than seeing it.", audubon: "https://www.audubon.org/field-guide/bird/bells-vireo",          img: P(17845015) },
+      { name: "Great Blue Heron",   sciName: "Ardea herodias",          photoKey: "great-blue-heron",   note: "Standing nearly 4 ft tall, this prehistoric-looking wader is hard to miss along the pond edges.", audubon: "https://www.audubon.org/field-guide/bird/great-blue-heron" },
+      { name: "Black-necked Stilt", sciName: "Himantopus mexicanus",    photoKey: "black-necked-stilt", note: "Unmistakable pied bird on absurdly long pink legs. Noisily defends its nest — kids love the drama.", audubon: "https://www.audubon.org/field-guide/bird/black-necked-stilt" },
+      { name: "American Avocet",    sciName: "Recurvirostra americana", photoKey: "american-avocet",    note: "Elegant shorebird with a long upturned bill it sweeps side-to-side. Vivid russet head in breeding plumage.", audubon: "https://www.audubon.org/field-guide/bird/american-avocet" },
+      { name: "Snowy Egret",        sciName: "Egretta thula",           photoKey: "snowy-egret",        note: "Bright white with yellow feet it uses to stir up fish. Once hunted to near extinction for its plumes.", audubon: "https://www.audubon.org/field-guide/bird/snowy-egret" },
+      { name: "Osprey",             sciName: "Pandion haliaetus",       photoKey: "osprey",             note: "Fish-hunting raptor that hovers then plunge-dives feet-first into water. A crowd favorite.", audubon: "https://www.audubon.org/field-guide/bird/osprey" },
+      { name: "Least Bell's Vireo", sciName: "Vireo bellii pusillus",   photoKey: "least-bells-vireo", note: "Federally endangered. Arrives each May to nest in willows. Hearing it is easier than seeing it.", audubon: "https://www.audubon.org/field-guide/bird/bells-vireo" },
     ],
   },
   {
@@ -53,11 +49,11 @@ const hikes = [
     eBirdHotspot: "L1045960",
     eBirdUrl: "https://ebird.org/hotspot/L1045960",
     birds: [
-      { name: "California Quail",     sciName: "Callipepla californica",   note: "CA state bird! Look for coveys trotting along the trail with their comical topknot plumes bobbing.", audubon: "https://www.audubon.org/field-guide/bird/california-quail",    img: P(9850526) },
-      { name: "Greater Roadrunner",   sciName: "Geococcyx californianus",  note: "Yes, like the cartoon! Runs up to 20 mph and eats rattlesnakes. Kids absolutely love this one.", audubon: "https://www.audubon.org/field-guide/bird/greater-roadrunner",  img: P(4436299) },
-      { name: "Acorn Woodpecker",     sciName: "Melanerpes formicivorus",  note: "Clown-faced woodpecker with a raucous waka-waka call. Drills acorns into storage trees — look for studded oaks.", audubon: "https://www.audubon.org/field-guide/bird/acorn-woodpecker",    img: P(6862522) },
-      { name: "White-tailed Kite",    sciName: "Elanus leucurus",          note: "Ghost-white raptor that hovers like a tiny helicopter over open meadows before dropping on prey.", audubon: "https://www.audubon.org/field-guide/bird/white-tailed-kite",   img: P(12345118) },
-      { name: "Wrentit",              sciName: "Chamaea fasciata",         note: "Heard far more than seen — its bouncing-ball song is the signature sound of California chaparral.", audubon: "https://www.audubon.org/field-guide/bird/wrentit",             img: P(18101214) },
+      { name: "California Quail",   sciName: "Callipepla californica",  photoKey: "california-quail",   note: "CA state bird! Look for coveys trotting along the trail with their comical topknot plumes bobbing.", audubon: "https://www.audubon.org/field-guide/bird/california-quail" },
+      { name: "Greater Roadrunner", sciName: "Geococcyx californianus", photoKey: "greater-roadrunner", note: "Yes, like the cartoon! Runs up to 20 mph and eats rattlesnakes. Kids absolutely love this one.", audubon: "https://www.audubon.org/field-guide/bird/greater-roadrunner" },
+      { name: "Acorn Woodpecker",   sciName: "Melanerpes formicivorus", photoKey: "acorn-woodpecker",   note: "Clown-faced woodpecker with a raucous waka-waka call. Drills acorns into storage trees — look for studded oaks.", audubon: "https://www.audubon.org/field-guide/bird/acorn-woodpecker" },
+      { name: "White-tailed Kite",  sciName: "Elanus leucurus",         photoKey: "white-tailed-kite",  note: "Ghost-white raptor that hovers like a tiny helicopter over open meadows before dropping on prey.", audubon: "https://www.audubon.org/field-guide/bird/white-tailed-kite" },
+      { name: "Wrentit",            sciName: "Chamaea fasciata",        photoKey: "wrentit",            note: "Heard far more than seen — its bouncing-ball song is the signature sound of California chaparral.", audubon: "https://www.audubon.org/field-guide/bird/wrentit" },
     ],
   },
   {
@@ -75,12 +71,12 @@ const hikes = [
     eBirdHotspot: "L23504131",
     eBirdUrl: "https://ebird.org/hotspot/L23504131",
     birds: [
-      { name: "California Towhee",    sciName: "Melozone crissalis",       note: "Chunky brown bird that scratches loudly in leaf litter. Very common on canyon trails.", audubon: "https://www.audubon.org/field-guide/bird/california-towhee",   img: P(6862750) },
-      { name: "Anna's Hummingbird",   sciName: "Calypte anna",             note: "Year-round resident. Males flash iridescent magenta-rose heads. Buzzes along the coastal sage scrub.", audubon: "https://www.audubon.org/field-guide/bird/annas-hummingbird",  img: P(6862568) },
-      { name: "California Gnatcatcher", sciName: "Polioptila californica", note: "Federally threatened. Tiny dark bird with a mewing call. Moro Canyon is prime protected habitat.", audubon: "https://www.audubon.org/field-guide/bird/california-gnatcatcher", img: P(29673628) },
-      { name: "Peregrine Falcon",     sciName: "Falco peregrinus",         note: "World's fastest animal at 200+ mph in a dive. Nests on coastal cliffs here.", audubon: "https://www.audubon.org/field-guide/bird/peregrine-falcon",    img: P(6862738) },
-      { name: "Brown Pelican",        sciName: "Pelecanus occidentalis",   note: "Squadrons fly in formation along the coast below — visible from the upper ridge.", audubon: "https://www.audubon.org/field-guide/bird/brown-pelican",        img: P(28897913) },
-      { name: "Nuttall's Woodpecker", sciName: "Dryobates nuttallii",      note: "CA-endemic woodpecker. Black-and-white ladder back, rattling call in the canyon oaks.", audubon: "https://www.audubon.org/field-guide/bird/nuttalls-woodpecker", img: P(6862666) },
+      { name: "California Towhee",      sciName: "Melozone crissalis",      photoKey: "california-towhee",      note: "Chunky brown bird that scratches loudly in leaf litter. Very common on canyon trails.", audubon: "https://www.audubon.org/field-guide/bird/california-towhee" },
+      { name: "Anna's Hummingbird",     sciName: "Calypte anna",            photoKey: "annas-hummingbird",     note: "Year-round resident. Males flash iridescent magenta-rose heads. Buzzes along the coastal sage scrub.", audubon: "https://www.audubon.org/field-guide/bird/annas-hummingbird" },
+      { name: "California Gnatcatcher", sciName: "Polioptila californica",  photoKey: "california-gnatcatcher", note: "Federally threatened. Tiny dark bird with a mewing call. Moro Canyon is prime protected habitat.", audubon: "https://www.audubon.org/field-guide/bird/california-gnatcatcher" },
+      { name: "Peregrine Falcon",       sciName: "Falco peregrinus",        photoKey: "peregrine-falcon",       note: "World's fastest animal at 200+ mph in a dive. Nests on coastal cliffs here.", audubon: "https://www.audubon.org/field-guide/bird/peregrine-falcon" },
+      { name: "Brown Pelican",          sciName: "Pelecanus occidentalis",  photoKey: "brown-pelican",          note: "Squadrons fly in formation along the coast below — visible from the upper ridge.", audubon: "https://www.audubon.org/field-guide/bird/brown-pelican" },
+      { name: "Nuttall's Woodpecker",   sciName: "Dryobates nuttallii",     photoKey: "nuttalls-woodpecker",   note: "CA-endemic woodpecker. Black-and-white ladder back, rattling call in the canyon oaks.", audubon: "https://www.audubon.org/field-guide/bird/nuttalls-woodpecker" },
     ],
   },
   {
@@ -98,11 +94,11 @@ const hikes = [
     eBirdHotspot: "L285193",
     eBirdUrl: "https://ebird.org/hotspot/L285193",
     birds: [
-      { name: "Cactus Wren",          sciName: "Campylorhynchus brunneicapillus", note: "Largest US wren — its loud rattling call sounds like a car failing to start. Year-round resident.", audubon: "https://www.audubon.org/field-guide/bird/cactus-wren",         img: P(6862660) },
-      { name: "Red-tailed Hawk",      sciName: "Buteo jamaicensis",        note: "The classic soaring hawk. Watch for its brick-red tail against the blue sky over the reservoir.", audubon: "https://www.audubon.org/field-guide/bird/red-tailed-hawk",      img: P(202602991) },
-      { name: "Western Bluebird",     sciName: "Sialia mexicana",          note: "Stunning cobalt blue with a rusty chest. Watch for them perching on fence posts near the meadow.", audubon: "https://www.audubon.org/field-guide/bird/western-bluebird",     img: P(6862788) },
-      { name: "American Coot",        sciName: "Fulica americana",         note: "Comical black waterbird with a white beak. Often seen with fuzzy red-headed chicks in spring.", audubon: "https://www.audubon.org/field-guide/bird/american-coot",        img: P(6862490) },
-      { name: "Cooper's Hawk",        sciName: "Accipiter cooperii",       note: "Fast, nimble hawk. Often seen darting through the eucalyptus groves near the reservoir.", audubon: "https://www.audubon.org/field-guide/bird/coopers-hawk",        img: P(6863066) },
+      { name: "Cactus Wren",    sciName: "Campylorhynchus brunneicapillus", photoKey: "cactus-wren",    note: "Largest US wren — its loud rattling call sounds like a car failing to start. Year-round resident.", audubon: "https://www.audubon.org/field-guide/bird/cactus-wren" },
+      { name: "Red-tailed Hawk",sciName: "Buteo jamaicensis",               photoKey: "red-tailed-hawk",note: "The classic soaring hawk. Watch for its brick-red tail against the blue sky over the reservoir.", audubon: "https://www.audubon.org/field-guide/bird/red-tailed-hawk" },
+      { name: "Western Bluebird",sciName: "Sialia mexicana",                photoKey: "western-bluebird",note: "Stunning cobalt blue with a rusty chest. Watch for them perching on fence posts near the meadow.", audubon: "https://www.audubon.org/field-guide/bird/western-bluebird" },
+      { name: "American Coot",  sciName: "Fulica americana",                photoKey: "american-coot",  note: "Comical black waterbird with a white beak. Often seen with fuzzy red-headed chicks in spring.", audubon: "https://www.audubon.org/field-guide/bird/american-coot" },
+      { name: "Cooper's Hawk",  sciName: "Accipiter cooperii",              photoKey: "coopers-hawk",   note: "Fast, nimble hawk. Often seen darting through the eucalyptus groves near the reservoir.", audubon: "https://www.audubon.org/field-guide/bird/coopers-hawk" },
     ],
   },
   {
@@ -120,11 +116,11 @@ const hikes = [
     eBirdHotspot: "L1572888",
     eBirdUrl: "https://ebird.org/hotspot/L1572888",
     birds: [
-      { name: "California Quail",       sciName: "Callipepla californica",  note: "The trail is named for these birds. Large coveys are common year-round along the brushy edges.", audubon: "https://www.audubon.org/field-guide/bird/california-quail",    img: P(9850526) },
-      { name: "Say's Phoebe",           sciName: "Sayornis saya",           note: "Tawny-bellied flycatcher that perches on fence posts and bobs its tail. Very approachable.", audubon: "https://www.audubon.org/field-guide/bird/says-phoebe",          img: P(6862772) },
-      { name: "White-crowned Sparrow",  sciName: "Zonotrichia leucophrys",  note: "Bold black-and-white striped head. Winters here in large flocks scratching through the brush.", audubon: "https://www.audubon.org/field-guide/bird/white-crowned-sparrow", img: P(6862808) },
-      { name: "Northern Harrier",       sciName: "Circus hudsonius",        note: "Low-flying hawk with a distinctive white rump patch. Quarters over open grassland hunting by sound.", audubon: "https://www.audubon.org/field-guide/bird/northern-harrier",    img: P(6862704) },
-      { name: "Loggerhead Shrike",      sciName: "Lanius ludovicianus",     note: "A songbird that hunts like a hawk. Nicknamed 'butcherbird' — impales prey on thorns.", audubon: "https://www.audubon.org/field-guide/bird/loggerhead-shrike",   img: P(6862638) },
+      { name: "California Quail",      sciName: "Callipepla californica", photoKey: "california-quail",      note: "The trail is named for these birds. Large coveys are common year-round along the brushy edges.", audubon: "https://www.audubon.org/field-guide/bird/california-quail" },
+      { name: "Say's Phoebe",          sciName: "Sayornis saya",          photoKey: "says-phoebe",           note: "Tawny-bellied flycatcher that perches on fence posts and bobs its tail. Very approachable.", audubon: "https://www.audubon.org/field-guide/bird/says-phoebe" },
+      { name: "White-crowned Sparrow", sciName: "Zonotrichia leucophrys", photoKey: "white-crowned-sparrow", note: "Bold black-and-white striped head. Winters here in large flocks scratching through the brush.", audubon: "https://www.audubon.org/field-guide/bird/white-crowned-sparrow" },
+      { name: "Northern Harrier",      sciName: "Circus hudsonius",       photoKey: "northern-harrier",      note: "Low-flying hawk with a distinctive white rump patch. Quarters over open grassland hunting by sound.", audubon: "https://www.audubon.org/field-guide/bird/northern-harrier" },
+      { name: "Loggerhead Shrike",     sciName: "Lanius ludovicianus",    photoKey: "loggerhead-shrike",     note: "A songbird that hunts like a hawk. Nicknamed 'butcherbird' — impales prey on thorns.", audubon: "https://www.audubon.org/field-guide/bird/loggerhead-shrike" },
     ],
   },
   {
@@ -142,21 +138,20 @@ const hikes = [
     eBirdHotspot: "L1049518",
     eBirdUrl: "https://ebird.org/hotspot/L1049518",
     birds: [
-      { name: "Wrentit",               sciName: "Chamaea fasciata",        note: "The voice of the chaparral. Almost never leaves dense brush — its song is unmissable.", audubon: "https://www.audubon.org/field-guide/bird/wrentit",             img: P(18101214) },
-      { name: "Costa's Hummingbird",   sciName: "Calypte costae",          note: "Male has a stunning purple gorget that flares like a mustache. A desert species extending into OC's coastal sage.", audubon: "https://www.audubon.org/field-guide/bird/costas-hummingbird",  img: P(6862584) },
-      { name: "Rufous-crowned Sparrow",sciName: "Aimophila ruficeps",      note: "Shy, chunky sparrow of rocky slopes and sage scrub. Rusty cap and 'dear dear dear' call.", audubon: "https://www.audubon.org/field-guide/bird/rufous-crowned-sparrow", img: P(15322251) },
-      { name: "California Gnatcatcher",sciName: "Polioptila californica",  note: "Federally threatened. Laguna Coast Wilderness is one of its last strongholds in OC.", audubon: "https://www.audubon.org/field-guide/bird/california-gnatcatcher", img: P(29673628) },
-      { name: "Greater Roadrunner",    sciName: "Geococcyx californianus", note: "Spotted regularly trotting along trail edges. Eats lizards, snakes, and even other birds.", audubon: "https://www.audubon.org/field-guide/bird/greater-roadrunner",  img: P(4436299) },
+      { name: "Wrentit",                sciName: "Chamaea fasciata",       photoKey: "wrentit",                note: "The voice of the chaparral. Almost never leaves dense brush — its song is unmissable.", audubon: "https://www.audubon.org/field-guide/bird/wrentit" },
+      { name: "Costa's Hummingbird",    sciName: "Calypte costae",         photoKey: "costas-hummingbird",    note: "Male has a stunning purple gorget that flares like a mustache. A desert species extending into OC's coastal sage.", audubon: "https://www.audubon.org/field-guide/bird/costas-hummingbird" },
+      { name: "Rufous-crowned Sparrow", sciName: "Aimophila ruficeps",     photoKey: "rufous-crowned-sparrow", note: "Shy, chunky sparrow of rocky slopes and sage scrub. Rusty cap and 'dear dear dear' call.", audubon: "https://www.audubon.org/field-guide/bird/rufous-crowned-sparrow" },
+      { name: "California Gnatcatcher", sciName: "Polioptila californica", photoKey: "california-gnatcatcher", note: "Federally threatened. Laguna Coast Wilderness is one of its last strongholds in OC.", audubon: "https://www.audubon.org/field-guide/bird/california-gnatcatcher" },
+      { name: "Greater Roadrunner",     sciName: "Geococcyx californianus",photoKey: "greater-roadrunner",    note: "Spotted regularly trotting along trail edges. Eats lizards, snakes, and even other birds.", audubon: "https://www.audubon.org/field-guide/bird/greater-roadrunner" },
     ],
   },
 ];
 
-// ─── MERLIN DEEP LINK ────────────────────────────────────────────────────────
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function getMerlinUrl(bird) {
   return `https://merlin.allaboutbirds.org/the-only-one/?species=${encodeURIComponent(bird.sciName)}`;
 }
 
-// ─── EBIRD FETCH ─────────────────────────────────────────────────────────────
 async function fetchRecentSightings(hotspotId) {
   if (!EBIRD_KEY) return null;
   try {
@@ -169,14 +164,60 @@ async function fetchRecentSightings(hotspotId) {
   } catch { return null; }
 }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
-const difficultyColor = { "Easy": "#4a7c59", "Easy–Moderate": "#c07a2a", "Moderate": "#c0392b" };
-
 function daysAgo(dateStr) {
   const diff = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
   if (diff === 0) return "today";
   if (diff === 1) return "yesterday";
   return `${diff}d ago`;
+}
+
+const difficultyColor = { "Easy": "#4a7c59", "Easy–Moderate": "#c07a2a", "Moderate": "#c0392b" };
+
+// ─── PHOTO VARIANT TOGGLE ────────────────────────────────────────────────────
+function PhotoVariants({ photos, color }) {
+  const [idx, setIdx] = useState(0);
+  if (!photos || photos.length === 0) return <div style={{ width: "100%", height: "100%", background: "#e8e0d0", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 28 }}>🐦</span></div>;
+  const photo = photos[idx];
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <img src={photo.url} alt={photo.label} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => { e.target.style.display = "none"; }} />
+      {photos.length > 1 && (
+        <div style={{ position: "absolute", bottom: 4, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 4, padding: "0 4px" }}>
+          {photos.map((p, i) => (
+            <button key={i} onClick={e => { e.stopPropagation(); setIdx(i); }}
+              style={{ fontSize: 9, padding: "2px 6px", borderRadius: 10, border: "none", background: i === idx ? color : "rgba(255,255,255,0.7)", color: i === idx ? "#fff" : "#333", cursor: "pointer", fontWeight: i === idx ? 700 : 400, whiteSpace: "nowrap" }}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── BIRD DETAIL PHOTO ───────────────────────────────────────────────────────
+function DetailPhoto({ photos, color }) {
+  const [idx, setIdx] = useState(0);
+  if (!photos || photos.length === 0) return <div style={{ width: 90, height: 72, background: "#e8e0d0", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 28 }}>🐦</span></div>;
+  const photo = photos[idx];
+  return (
+    <div style={{ flexShrink: 0 }}>
+      <div style={{ width: 90, height: 72, borderRadius: 8, overflow: "hidden", position: "relative" }}>
+        <img src={photo.url} alt={photo.label} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
+      </div>
+      {photos.length > 1 && (
+        <div style={{ display: "flex", gap: 3, marginTop: 5, flexWrap: "wrap", maxWidth: 90 }}>
+          {photos.map((p, i) => (
+            <button key={i} onClick={() => setIdx(i)}
+              style={{ fontSize: 9, padding: "2px 5px", borderRadius: 8, border: `1px solid ${i === idx ? color : "#ccc"}`, background: i === idx ? color : "#fff", color: i === idx ? "#fff" : "#555", cursor: "pointer", fontWeight: i === idx ? 700 : 400, whiteSpace: "nowrap" }}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
+      {photo.credit && <div style={{ fontSize: 8, color: "#aaa", marginTop: 3, maxWidth: 90, lineHeight: 1.2 }}>{photo.credit}</div>}
+    </div>
+  );
 }
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
@@ -186,8 +227,24 @@ export default function App() {
   const [eBirdData, setEBirdData] = useState({});
   const [eBirdLoading, setEBirdLoading] = useState(false);
   const [showEBird, setShowEBird] = useState(false);
+  const [birdPhotos, setBirdPhotos] = useState({});
   const hasKey = Boolean(EBIRD_KEY);
 
+  // Load birds.json once on mount
+  useEffect(() => {
+    fetch("/birds.json")
+      .then(r => r.json())
+      .then(data => {
+        const photos = {};
+        for (const [key, val] of Object.entries(data)) {
+          if (key !== "_readme") photos[key] = val.photos || [];
+        }
+        setBirdPhotos(photos);
+      })
+      .catch(() => {}); // graceful failure — app works without photos
+  }, []);
+
+  // Load eBird sightings when trail changes
   useEffect(() => {
     setActiveBird(null);
     setShowEBird(false);
@@ -261,9 +318,7 @@ export default function App() {
                   {showEBird ? "Hide" : "🔴 Live"} Recent Sightings {eBirdLoading ? "…" : `(${currentEBird.length})`}
                 </button>
               ) : (
-                <span style={{ fontSize: 11, color: "#8a7a6a", fontStyle: "italic" }}>
-                  Add REACT_APP_EBIRD_KEY on Vercel to enable live sightings
-                </span>
+                <span style={{ fontSize: 11, color: "#8a7a6a", fontStyle: "italic" }}>Add REACT_APP_EBIRD_KEY on Vercel to enable live sightings</span>
               )}
             </div>
           </div>
@@ -296,24 +351,28 @@ export default function App() {
               Featured Birds ({activeHike.birds.length} species)
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 8 }}>
-              {activeHike.birds.map(bird => (
-                <button key={bird.name} onClick={() => setActiveBird(activeBird?.name === bird.name ? null : bird)}
-                  style={{ border: `2px solid ${activeBird?.name === bird.name ? activeHike.color : "#e0d8cc"}`, borderRadius: 10, overflow: "hidden", background: activeBird?.name === bird.name ? `${activeHike.color}12` : "#faf8f3", cursor: "pointer", transition: "all 0.15s", padding: 0, textAlign: "left" }}>
-                  <div style={{ width: "100%", height: 80, overflow: "hidden", background: "#e8e0d0" }}>
-                    <img src={bird.img} alt={bird.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => { e.target.style.display = "none"; }} />
-                  </div>
-                  <div style={{ padding: "7px 9px" }}>
-                    <div style={{ fontWeight: 700, fontSize: 11, color: "#1a2a1a", lineHeight: 1.2 }}>{bird.name}</div>
-                    <div style={{ fontSize: 9, color: "#8a7a6a", fontStyle: "italic", marginTop: 2 }}>{bird.sciName}</div>
-                  </div>
-                </button>
-              ))}
+              {activeHike.birds.map(bird => {
+                const photos = birdPhotos[bird.photoKey] || [];
+                return (
+                  <button key={bird.name} onClick={() => setActiveBird(activeBird?.name === bird.name ? null : bird)}
+                    style={{ border: `2px solid ${activeBird?.name === bird.name ? activeHike.color : "#e0d8cc"}`, borderRadius: 10, overflow: "hidden", background: activeBird?.name === bird.name ? `${activeHike.color}12` : "#faf8f3", cursor: "pointer", transition: "all 0.15s", padding: 0, textAlign: "left" }}>
+                    <div style={{ width: "100%", height: 80, overflow: "hidden", position: "relative" }}>
+                      <PhotoVariants photos={photos} color={activeHike.color} />
+                    </div>
+                    <div style={{ padding: "7px 9px" }}>
+                      <div style={{ fontWeight: 700, fontSize: 11, color: "#1a2a1a", lineHeight: 1.2 }}>{bird.name}</div>
+                      <div style={{ fontSize: 9, color: "#8a7a6a", fontStyle: "italic", marginTop: 2 }}>{bird.sciName}</div>
+                      {photos.length > 1 && <div style={{ fontSize: 8, color: activeHike.color, marginTop: 2 }}>↕ {photos.length} photos</div>}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             {/* BIRD DETAIL */}
             {activeBird && (
               <div style={{ marginTop: 14, background: `${activeHike.color}0d`, border: `1.5px solid ${activeHike.color}40`, borderRadius: 12, padding: "16px 18px", display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start" }}>
-                <img src={activeBird.img} alt={activeBird.name} style={{ width: 90, height: 72, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => { e.target.style.display = "none"; }} />
+                <DetailPhoto photos={birdPhotos[activeBird.photoKey] || []} color={activeHike.color} />
                 <div style={{ flex: 1, minWidth: 160 }}>
                   <div style={{ fontWeight: 700, fontSize: 15, color: "#1a2a1a" }}>{activeBird.name}</div>
                   <div style={{ fontSize: 11, fontStyle: "italic", color: "#6a7a6a", marginBottom: 7 }}>{activeBird.sciName}</div>
