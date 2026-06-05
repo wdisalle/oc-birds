@@ -38,8 +38,8 @@
     "photos": [
       {
         "label": "Adult",
-        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/6862802/medium.jpg",
-        "credit": "iNaturalist"
+        "url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/659121403/1200",
+        "credit": "ML659121403 Macaulay Library Alena Capek"
       }
     ]
   },
