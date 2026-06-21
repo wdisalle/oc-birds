@@ -343,6 +343,27 @@
       }
     ]
   },
+  
+  "yellow-warbler": {
+  "commonName": "Yellow Warbler",
+  "sciName": "Setophaga petechia",
+  "photos": []
+},
+"black-phoebe": {
+  "commonName": "Black Phoebe",
+  "sciName": "Sayornis nigricans",
+  "photos": []
+},
+"hooded-oriole": {
+  "commonName": "Hooded Oriole",
+  "sciName": "Icterus cucullatus",
+  "photos": []
+},
+"bewickss-wren": {
+  "commonName": "Bewick's Wren",
+  "sciName": "Thryomanes bewickii",
+  "photos": []
+},
 
   "rufous-crowned-sparrow": {
     "commonName": "Rufous-crowned Sparrow",
