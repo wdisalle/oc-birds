@@ -145,6 +145,28 @@ const hikes = [
       { name: "Greater Roadrunner",     sciName: "Geococcyx californianus",photoKey: "greater-roadrunner",    note: "Spotted regularly trotting along trail edges. Eats lizards, snakes, and even other birds.", audubon: "https://www.audubon.org/field-guide/bird/greater-roadrunner" },
     ],
   },
+  {
+  id: 7,
+  name: "O'Neill Regional Park",
+  location: "Trabuco Canyon / Irvine",
+  duration: "30 min – 2 hrs",
+  distance: "1–3.5 mi (your choice)",
+  difficulty: "Easy",
+  highlight: "Closest canyon park to Irvine. Riparian oak woodland along Trabuco Creek — great for birding the creek corridor. Family-friendly trails and shaded picnic areas.",
+  terrain: "Dirt trail, flat to gentle",
+  parking: "$3/vehicle",
+  color: "#3a7a8f",
+  emoji: "🌲",
+  eBirdHotspot: "L374421",
+  eBirdUrl: "https://ebird.org/hotspot/L374421",
+  birds: [
+    { name: "Yellow Warbler", sciName: "Setophaga petechia", photoKey: "yellow-warbler", note: "Bright lemon-yellow songbird that favors streamside willows. A summer breeder along Trabuco Creek.", audubon: "https://www.audubon.org/field-guide/bird/yellow-warbler" },
+    { name: "Black Phoebe", sciName: "Sayornis nigricans", photoKey: "black-phoebe", note: "Sooty black-and-white flycatcher that perches low near water, flicking its tail. Common year-round along the creek.", audubon: "https://www.audubon.org/field-guide/bird/black-phoebe" },
+    { name: "Hooded Oriole", sciName: "Icterus cucullatus", photoKey: "hooded-oriole", note: "Vivid orange-and-black oriole drawn to palm trees and riparian groves. Listen for its chattering call overhead.", audubon: "https://www.audubon.org/field-guide/bird/hooded-oriole" },
+    { name: "California Towhee", sciName: "Melozone crissalis", photoKey: "california-towhee", note: "Plain brown bird that scratches loudly in leaf litter near the trailheads. One of the most common birds at the park.", audubon: "https://www.audubon.org/field-guide/bird/california-towhee" },
+    { name: "Bewick's Wren", sciName: "Thryomanes bewickii", photoKey: "bewickss-wren", note: "Energetic little wren with a bold white eyebrow stripe. Sings a loud, complex song from dense brush.", audubon: "https://www.audubon.org/field-guide/bird/bewicks-wren" },
+  ],
+},
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
